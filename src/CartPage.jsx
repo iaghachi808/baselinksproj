@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
-import './App.css'; // Reuse the existing CSS for consistency
+import { Link } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import './App.css';
 
 export default function CartPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [cart, setCart] = useState(() => {
-    // Retrieve cart from localStorage or initialize empty
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
@@ -14,7 +15,6 @@ export default function CartPage() {
 
   useEffect(() => {
     setIsVisible(true);
-    // Save cart to localStorage whenever it changes
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
@@ -35,7 +35,6 @@ export default function CartPage() {
   const saveCustomization = () => {
     setCustomizingProduct(null);
     console.log('Customized:', customizingProduct.name, customizations[customizingProduct.id]);
-    // Add logic to save customization (e.g., to backend or state)
   };
 
   const cancelCustomization = () => {
@@ -48,28 +47,10 @@ export default function CartPage() {
 
   return (
     <div className="relative w-full min-h-screen bg-white overflow-hidden font-sans">
-      {/* Background Image */}
+      <Header />
       <div className="absolute inset-0 flex justify-center items-center">
         <img src="/src/assets/wallhaven-6d7ow6.jpg" alt="Background Image" className="object-cover w-full h-full opacity-50" />
       </div>
-
-      {/* Header */}
-      <div className={`absolute top-4 left-6 flex items-center space-x-2 ${isVisible ? 'animate-fade-in-up' : ''}`}>
-        <img src="/src/assets/OIP.webp" alt="BASELINKS Logo" className="h-8 w-auto" />
-        <Link to="/" className="text-2xl font-bold tracking-widest text-gray-900">BASELINKS</Link>
-      </div>
-
-      {/* Nav Menu */}
-      <div className="absolute top-4 right-6 flex space-x-6 text-sm font-medium bg-white bg-opacity-90 p-2 rounded-lg shadow-md">
-        <Link to="/home" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-100`}>HOME</Link>
-        <Link to="/about" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-200`}>ABOUT</Link>
-        <Link to="/phone" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-300`}>PHONE</Link>
-        <Link to="/products" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-400`}>PRODUCTS</Link>
-        <Link to="/contact" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-500`}>CONTACT US</Link>
-        <Link to="/cart" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-600`}>CART</Link>
-      </div>
-
-      {/* Main Content */}
       <div className="relative w-full text-center px-4 z-10 min-h-screen flex flex-col items-center justify-center">
         <div className={`inline-block bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-bold mb-6 ${isVisible ? 'animate-pulse-slow' : ''}`}>
           YOUR CART
@@ -80,8 +61,6 @@ export default function CartPage() {
         <p className={`text-xl sm:text-2xl text-gray-700 font-semibold mb-8 ${isVisible ? 'animate-fade-in-up' : ''} delay-200`}>
           Review and Customize Your Items
         </p>
-
-        {/* Cart Items */}
         {cart.length === 0 ? (
           <p className={`text-lg text-gray-600 ${isVisible ? 'animate-fade-in-up' : ''} delay-300`}>Your cart is empty.</p>
         ) : (
@@ -110,8 +89,6 @@ export default function CartPage() {
             ))}
           </div>
         )}
-
-        {/* Customization Form */}
         {customizingProduct && (
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-md bg-orange-100 bg-opacity-95 rounded-xl p-6 shadow-2xl z-20 animate-slide-up">
             <h2 className="text-xl text-orange-800 mb-4">Customize {customizingProduct.name || `Product ${customizingProduct.id}`}</h2>
@@ -138,11 +115,7 @@ export default function CartPage() {
           </div>
         )}
       </div>
-
-      {/* Footer */}
-      <div className={`w-full text-center text-sm text-gray-600 ${isVisible ? 'animate-fade-in-up' : ''} delay-800`}>
-        © 2025 BASELINKS. All rights reserved.
-      </div>
+      <Footer />
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import './App.css';
-import stock from './Stock'; // Ensure this matches the file name
 
-// Define AILandingPage as a named function/component
 function AILandingPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,26 +27,10 @@ function AILandingPage() {
 
   return (
     <div className="relative w-full min-h-screen bg-white overflow-hidden font-sans">
-      {/* Header */}
-      <div className={`absolute top-4 left-6 flex items-center space-x-2 ${isVisible ? 'animate-fade-in-up' : ''}`}>
-        <img src="/src/assets/OIP.webp" alt="BASELINKS Logo" className="h-8 w-auto" />
-        <a href="/" className="text-2xl font-bold tracking-widest text-gray-900">BASELINKS</a>
-      </div>
-
-      {/* Nav Menu */}
-      <div className="absolute top-4 right-6 flex space-x-6 text-sm font-medium bg-white bg-opacity-90 p-2 rounded-lg shadow-md">
-        <a href="/home" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-100`}>HOME</a>
-        <a href="/about" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-200`}>ABOUT</a>
-        <a href="/phone" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-300`}>PHONE</a>
-        <a href="/products" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-400`}>PRODUCTS</a>
-        <a href="/contact" className={`text-black font-bold hover:text-teal-600 transition-colors duration-300 ${isVisible ? 'animate-fade-in-up' : ''} delay-500`}>CONTACT US</a>
-      </div>
-
+      <Header />
       <div className="absolute inset-0 flex justify-center items-center">
         <img src="/src/assets/wallhaven-6d7ow6.jpg" alt="Background Fallback" className="object-cover w-full h-full opacity-50" />
       </div>
-
-      {/* Center Text Content */}
       <div className="relative w-full text-center px-4 z-10 min-h-screen flex flex-col items-center justify-center">
         <div className={`inline-block bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-bold mb-6 ${isVisible ? 'animate-pulse-slow' : ''}`}>
           CREATE UNLIMITED IMAGES
@@ -64,7 +48,6 @@ function AILandingPage() {
             </button>
           </Link>
         </div>
-
         <div className="w-full max-w-3xl mx-auto mb-12">
           <form action="/search" method="get" className={`flex items-center ${isVisible ? 'animate-fade-in-up' : ''} delay-400`}>
             <input
@@ -85,8 +68,6 @@ function AILandingPage() {
             </button>
           </form>
         </div>
-
-        {/* Image Placeholders */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 px-4 w-full max-w-6xl mx-auto">
           {filteredPlaceholders.map((card) => (
             <div
@@ -104,24 +85,9 @@ function AILandingPage() {
           ))}
         </div>
       </div>
-
-      {/* Footer */}
-      <div className={`w-full text-center text-sm text-gray-600 ${isVisible ? 'animate-fade-in-up' : ''} delay-800`}>
-        © 2025 Your Company. All rights reserved.
-      </div>
+      <Footer />
     </div>
   );
 }
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<AILandingPage />} />
-        <Route path="/stock" element={<stock />} />
-      </Routes>
-    </Router>
-  );
-}
-
-export default App; // Single default export
+export default AILandingPage;
