@@ -1,0 +1,77 @@
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseSlow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1.2s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 2s infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce 2s infinite;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: white;
+  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.hover:shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+.hover-darken {
+  filter: brightness(40%);
+}
+
+@media (max-width: 640px) {
+  .text-4xl { font-size: 2rem; }
+  .text-xl { font-size: 1.2rem; }
+  .grid-cols-1 { grid-template-columns: 1fr; }
+  .w-40 { width: 30%; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .w-48 { width: 40%; }
+}
+
+@media (min-width: 1025px) {
+  .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
