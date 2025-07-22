@@ -31,15 +31,15 @@ function Productdetails() {
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen bg-white overflow-hidden font-sans" style={{ backgroundImage: `url('src/assets/wallhaven-6d7ow6.png')`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+    <div className="relative w-full min-h-screen bg-white overflow-hidden font-sans" style={{ backgroundImage: `url('src/assets/wallhaven-6d7ow6.png')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <Header />
       <div className="relative w-full text-center px-4 z-10 min-h-screen flex flex-col items-center justify-center">
         <div className={`inline-block bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-bold mb-6 ${isVisible ? 'animate-pulse-slow' : ''}`}>
           PRODUCT DETAILS
         </div>
         {selectedProduct && (
-          <div className="w-full max-w-3xl mx-auto p-6 bg-white bg-opacity-90 rounded-lg shadow-lg">
-            <img src={selectedProduct.img} alt={selectedProduct.name} className="w-full h-64 object-cover rounded-t-lg" />
+          <div className="w-full max-w-5xl mx-auto p-6 bg-white bg-opacity-90 rounded-lg shadow-lg flex flex-row items-start">
+            <img src={selectedProduct.img} alt={selectedProduct.name} className="w-1/3 h-64 object-cover rounded-l-lg mr-6" />
             <div className="p-4">
               <h2 className="text-3xl font-bold text-orange-600 mb-2">{selectedProduct.name}</h2>
               <p className="text-lg text-orange-700 mb-4">{selectedProduct.desc}</p>
@@ -80,6 +80,23 @@ function Productdetails() {
                   </button>
                 </form>
               </div>
+            </div>
+          </div>
+        )}
+        {selectedProduct && (
+          <div className="w-full max-w-5xl mx-auto mt-8 p-6 bg-white bg-opacity-90 rounded-lg shadow-lg">
+            <h3 className="text-xl font-bold text-orange-600 mb-4">Related Assets</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {products
+                .filter(p => p.id !== selectedProduct.id)
+                .slice(0, 3) // Show up to 3 related assets
+                .map(related => (
+                  <div key={related.id} className="p-2 bg-orange-100 rounded-lg text-center">
+                    <img src={related.img} alt={related.name} className="w-full h-32 object-cover rounded-t-lg" />
+                    <p className="text-orange-700 mt-2">{related.name}</p>
+                    <p className="text-orange-500">${related.price}</p>
+                  </div>
+                ))}
             </div>
           </div>
         )}
