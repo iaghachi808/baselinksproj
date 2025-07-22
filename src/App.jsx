@@ -1,20 +1,23 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Landingpage from './Landingpage';
-import Stock from './Stock';
-import CartPage from './CartPage';
+import Clientpage from './pages/Clientpage';
+import Landingpage from './pages/Landingpage';
+import Stock from './pages/Stock';
+import CartPage from './pages/CartPage';
+import Productdetails from './pages/productdetails';
 
 function App() {
   return (
     <Router>
-      <Header />
+     
       <Routes>
+        <Route path="/custom" element={<Productdetails />} />
+        <Route path="/client" element={<Clientpage />} />
         <Route path="/" element={<Landingpage />} />
         <Route path="/stock" element={<Stock />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
-      <Footer />
+      
     </Router>
   );
 }
