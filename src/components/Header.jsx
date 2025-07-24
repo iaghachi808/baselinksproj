@@ -1,78 +1,155 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from '@headlessui/react';
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'HOME', href: '/', current: true},
-  { name: 'PRODUCTS', href: '/stock', current: false},
-  { name: 'ABOUT US', href: '#', current: false},
-  { name: 'PHONE', href: '#', current: false},
-  { name: 'CART', href: '/cart', current: false},
-]
+  { name: 'HOME', href: '/', current: true },
+  { name: 'PRODUCTS', href: '/stock', current: false },
+  { name: 'ABOUT US', href: '#', current: false },
+  { name: 'PHONE', href: '#', current: false },
+  { name: 'CART', href: '/cart', current: false },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function Example() {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  const toggleDropdown = () => setOpen(!open);
+
+  const handleClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleNavigate = () => {
+    setOpen(false);
+    navigate('/login');
+  };
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
+          {/* Mobile Menu Button */}
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-50 hover:bg-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
+              <Bars3Icon
+                aria-hidden="true"
+                className="block size-6 group-data-open:hidden"
+              />
+              <XMarkIcon
+                aria-hidden="true"
+                className="hidden size-6 group-data-open:block"
+              />
             </DisclosureButton>
           </div>
+
+          {/* Logo + Navigation */}
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
-              <img alt="BASELINKS" src="/src/assets/OIP.webp" className="h-8 w-auto"/>
+              <img alt="BASELINKS" src="/src/assets/OIP.webp" className="h-8 w-auto" />
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                {navigation.map((item) => 
-                <a key={item.name} href={item.href} aria-current={item.current ? 'page' : undefined}
-                className={classNames(item.current ? 'bg-gray-50 text-black' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium',)} >
-                  {item.name}
-                </a>
-                )}
+                {navigation.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    aria-current={item.current ? 'page' : undefined}
+                    className={classNames(
+                      item.current
+                        ? 'bg-gray-50 text-black'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'rounded-md px-3 py-2 text-sm font-medium'
+                    )}
+                  >
+                    {item.name}
+                  </a>
+                ))}
               </div>
             </div>
           </div>
+
+          {/* Right Section - Notifications and User Icon */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button type="button" className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+            {/* Bell Icon */}
+            <button
+              type="button"
+              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
+            >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
               <BellIcon aria-hidden="true" className="size-6" />
             </button>
+
+            {/* User Dropdown */}
             <div className="ml-4">
-              <Link to="/client">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
-                  <img alt="" src="/src/assets/user-line.png" className="h-8 w-auto"/>
-                </div>
-              </Link>
+              <div className="relative" ref={dropdownRef}>
+                <button onClick={toggleDropdown} className="focus:outline-none">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md hover:scale-105 transition-transform duration-200">
+                    <img
+                      alt="user"
+                      src="/src/assets/user-line.png"
+                      className="h-6 w-auto"
+                    />
+                  </div>
+                </button>
+
+                {open && (
+                  <div className="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg z-50 py-2 animate-fade-in-up">
+                    <button
+                      onClick={handleNavigate}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 hover:text-orange-600"
+                    >
+                      Login / Signup
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Mobile Navigation Panel */}
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
-          {navigation.map((item) =>
-          <DisclosureButton key={item.name} as="a" href={item.href} 
-          aria-current={item.current ? 'page' : undefined}
-          className={classNames(item.current ? 'bg-gray-50 text-black' : 'text-gray-300 hover:bg-gray-700 hover:text-black',
-            'block rounded-md px-3 py-3  text-base font-medium',
-          )}>
-            {item.name}
-          </DisclosureButton>
-          )}
+          {navigation.map((item) => (
+            <DisclosureButton
+              key={item.name}
+              as="a"
+              href={item.href}
+              aria-current={item.current ? 'page' : undefined}
+              className={classNames(
+                item.current
+                  ? 'bg-gray-50 text-black'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-black',
+                'block rounded-md px-3 py-3  text-base font-medium'
+              )}
+            >
+              {item.name}
+            </DisclosureButton>
+          ))}
         </div>
       </DisclosurePanel>
     </Disclosure>
-  )
+  );
 }
