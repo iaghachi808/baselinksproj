@@ -2,24 +2,83 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../App.css';
-import { FaBoxOpen, FaUsers, FaClipboardList, FaMoneyBillWave, FaTruck } from 'react-icons/fa';
+import { FaBoxOpen, FaUsers, FaClipboardList, FaMoneyBillWave, FaComments } from 'react-icons/fa';
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [chatInput, setChatInput] = useState('');
+  const [ticketChats, setTicketChats] = useState({
+    'Assets Problems': [
+      { sender: 'User', message: 'My T-shirt was not delivered as expected.' },
+      { sender: 'User', message: 'It had a stain on it as well.' }
+    ],
+    'Payment Problems': [
+      { sender: 'User', message: 'My payment went through but I didn’t receive confirmation.' },
+      { sender: 'User', message: 'Please check this urgently.' }
+    ]
+  });
+
+  const handleSendMessage = () => {
+    if (!chatInput.trim()) return;
+    const updatedChats = [...(ticketChats[selectedTicket] || []), { sender: 'Admin', message: chatInput }];
+    setTicketChats(prev => ({ ...prev, [selectedTicket]: updatedChats }));
+    setChatInput('');
+  };
+
+  const renderChat = () => {
+    if (!selectedTicket) {
+      return <p className="text-gray-600 italic mt-4">Select a ticket to view conversation.</p>;
+    }
+
+    const chats = ticketChats[selectedTicket] || [];
+
+    return (
+      <div className="mt-6">
+        <div className="h-64 overflow-y-auto bg-white p-4 rounded-md shadow-inner space-y-2 border border-gray-200">
+          {chats.map((chat, i) => (
+            <div
+              key={i}
+              className={`max-w-xs p-2 rounded-md text-sm ${
+                chat.sender === 'Admin'
+                  ? 'bg-black text-white self-end ml-auto'
+                  : 'bg-gray-200 text-gray-800'
+              }`}
+            >
+              <strong>{chat.sender}: </strong> {chat.message}
+            </div>
+          ))}
+        </div>
+        <div className="flex mt-4 gap-2">
+          <input
+            type="text"
+            className="flex-1 px-4 py-2 border rounded-md"
+            value={chatInput}
+            onChange={e => setChatInput(e.target.value)}
+            placeholder="Type your response..."
+          />
+          <button
+            className="px-4 py-2 bg-black text-white rounded-md"
+            onClick={handleSendMessage}
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4">Welcome, Admin </h2>
+            <h2 className="text-2xl font-bold mb-4">Welcome, Admin</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {[
-                { title: 'Total Products', value: 120, icon: <FaBoxOpen className="text-2xl" /> },
-                { title: 'Active Users', value: 457, icon: <FaUsers className="text-2xl" /> },
-                { title: 'Custom Requests', value: 18, icon: <FaClipboardList className="text-2xl" /> },
-                { title: 'Today’s Sales', value: '₦87,500', icon: <FaMoneyBillWave className="text-2xl" /> }
-              ].map((item, idx) => (
+              {[{ title: 'Total Products', value: 120, icon: <FaBoxOpen className="text-2xl" /> },
+              { title: 'Active Users', value: 457, icon: <FaUsers className="text-2xl" /> },
+              { title: 'Custom Requests', value: 18, icon: <FaClipboardList className="text-2xl" /> },
+              { title: 'Today’s Sales', value: '₦87,500', icon: <FaMoneyBillWave className="text-2xl" /> }].map((item, idx) => (
                 <div key={idx} className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4">
                   <div className="p-3 bg-gray-100 rounded-full">{item.icon}</div>
                   <div>
@@ -28,35 +87,6 @@ const AdminPage = () => {
                   </div>
                 </div>
               ))}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Recent Orders */}
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold mb-4">Recent Orders</h3>
-                <ul className="space-y-3 text-sm">
-                  {[
-                    'Order #1032 - 2x T-Shirts',
-                    'Order #1031 - 1x Custom Hoodie',
-                    'Order #1030 - 3x Joggers',
-                  ].map((order, i) => (
-                    <li key={i} className="flex justify-between border-b pb-2">
-                      <span>{order}</span>
-                      <span className="text-green-600">Delivered</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Activity Feed */}
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold mb-4">Admin Activity</h3>
-                <ul className="space-y-3 text-sm text-gray-700">
-                  <li>Updated 5 products - 3 mins ago</li>
-                  <li>Approved a custom request</li>
-                  <li>New vendor registered - 10 mins ago</li>
-                </ul>
-              </div>
             </div>
           </div>
         );
@@ -86,10 +116,7 @@ const AdminPage = () => {
           <div>
             <h2 className="text-2xl font-bold mb-4">Customization Requests</h2>
             <ul className="space-y-4">
-              {[
-                'User A requested a red hoodie with initials.',
-                'User B wants a slim-fit jogger in navy.',
-              ].map((req, i) => (
+              {['User A requested a red hoodie with initials.', 'User B wants a slim-fit jogger in navy.'].map((req, i) => (
                 <li key={i} className="bg-white p-4 rounded-lg shadow-md">
                   <p>{req}</p>
                   <div className="mt-2 flex gap-2">
@@ -117,10 +144,8 @@ const AdminPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    { name: 'Jane Doe', email: 'jane@example.com', role: 'Client', status: 'Active' },
-                    { name: 'John Smith', email: 'john@example.com', role: 'Vendor', status: 'Pending' },
-                  ].map((user, i) => (
+                  {[{ name: 'Jane Doe', email: 'jane@example.com', role: 'Client', status: 'Active' },
+                  { name: 'John Smith', email: 'john@example.com', role: 'Vendor', status: 'Pending' }].map((user, i) => (
                     <tr key={i} className="border-t hover:bg-gray-50">
                       <td className="px-4 py-3">{user.name}</td>
                       <td className="px-4 py-3">{user.email}</td>
@@ -138,6 +163,29 @@ const AdminPage = () => {
           </div>
         );
 
+      case 'tickets':
+        return (
+          <div>
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><FaComments /> Support Tickets</h2>
+            <div className="flex gap-8">
+              <div className="w-1/3 space-y-3">
+                {Object.keys(ticketChats).map((ticket, i) => (
+                  <div
+                    key={i}
+                    className={`p-3 rounded-md shadow-sm cursor-pointer transition ${
+                      selectedTicket === ticket ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'
+                    }`}
+                    onClick={() => setSelectedTicket(ticket)}
+                  >
+                    {ticket}
+                  </div>
+                ))}
+              </div>
+              <div className="w-2/3">{renderChat()}</div>
+            </div>
+          </div>
+        );
+
       default:
         return <p className="text-red-500">Invalid section</p>;
     }
@@ -146,22 +194,18 @@ const AdminPage = () => {
   return (
     <div className="relative w-full min-h-screen bg-gray-100 font-sans">
       <Header />
-
       <div className="flex">
-        {/* Sidebar */}
         <aside className="w-64 bg-white/90 backdrop-blur-md border-r border-gray-200 p-6 shadow-md min-h-screen">
           <ul className="space-y-2 text-gray-800 text-sm font-medium">
             <li onClick={() => setActiveTab('dashboard')} className={`px-4 py-2 rounded-md shadow-sm cursor-pointer transition ${activeTab === 'dashboard' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}>Dashboard</li>
             <li onClick={() => setActiveTab('upload')} className={`px-4 py-2 rounded-md cursor-pointer transition ${activeTab === 'upload' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}>Upload Products</li>
             <li onClick={() => setActiveTab('customizations')} className={`px-4 py-2 rounded-md cursor-pointer transition ${activeTab === 'customizations' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}>Customization Requests</li>
             <li onClick={() => setActiveTab('users')} className={`px-4 py-2 rounded-md cursor-pointer transition ${activeTab === 'users' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}>View Users</li>
+            <li onClick={() => setActiveTab('tickets')} className={`px-4 py-2 rounded-md cursor-pointer transition ${activeTab === 'tickets' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}>Tickets</li>
           </ul>
         </aside>
-
-        {/* Main Content */}
         <main className="flex-1 p-8">{renderContent()}</main>
       </div>
-
       <Footer />
     </div>
   );
