@@ -45,6 +45,9 @@ export default function StockPage() {
     if (!selectedProduct) setSelectedProduct(product);
     setHoveredProduct(null);
   };
+  useEffect(()=>{
+    
+  },[])
 
   const handleCloseTab = () => setSelectedProduct(null);
 

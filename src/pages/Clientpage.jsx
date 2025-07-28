@@ -13,10 +13,8 @@ const Dashboard = () => {
           <ul className="space-y-2 text-gray-800 text-sm font-medium">
             <li className="bg-black text-white px-4 py-2 rounded-md shadow-sm">Dashboard</li>
             <li className="hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer transition">Orders</li>
-            <li className="hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer transition">Downloads</li>
-            <li className="hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer transition">Wallet</li>
-            <li className="hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer transition">Payment Method</li>
-            <li className="hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer transition">Wishlist</li>
+         
+            <li className="hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer transition">Transactions</li>
             <li className="hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer transition">Logout</li>
           </ul>
         </aside>
